@@ -37,11 +37,11 @@ class LlmResponseParser:
       self.__ctx_manager = ctx_manager
 
     
-    def ExtractResume(
+    def Divide(
         self,
         llm_response: str,
         baml_options: BamlCallOptions = {},
-    ) -> types.Resume:
+    ) -> str:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb # type: ignore (we know how to use this private attribute)
@@ -50,7 +50,7 @@ class LlmResponseParser:
       __cr__ = baml_options.get("client_registry", None)
 
       parsed = self.__runtime.parse_llm_response(
-        "ExtractResume",
+        "Divide",
         llm_response,
         types,
         types,
@@ -61,7 +61,33 @@ class LlmResponseParser:
         __cr__,
       )
 
-      return cast(types.Resume, parsed)
+      return cast(str, parsed)
+    
+    def ExecutePlan(
+        self,
+        llm_response: str,
+        baml_options: BamlCallOptions = {},
+    ) -> types.PlanResult:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      parsed = self.__runtime.parse_llm_response(
+        "ExecutePlan",
+        llm_response,
+        types,
+        types,
+        partial_types,
+        False,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return cast(types.PlanResult, parsed)
     
     def GeneratePlans(
         self,
@@ -89,6 +115,84 @@ class LlmResponseParser:
 
       return cast(types.Response, parsed)
     
+    def Multiply(
+        self,
+        llm_response: str,
+        baml_options: BamlCallOptions = {},
+    ) -> str:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      parsed = self.__runtime.parse_llm_response(
+        "Multiply",
+        llm_response,
+        types,
+        types,
+        partial_types,
+        False,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return cast(str, parsed)
+    
+    def Subtract(
+        self,
+        llm_response: str,
+        baml_options: BamlCallOptions = {},
+    ) -> str:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      parsed = self.__runtime.parse_llm_response(
+        "Subtract",
+        llm_response,
+        types,
+        types,
+        partial_types,
+        False,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return cast(str, parsed)
+    
+    def Sum(
+        self,
+        llm_response: str,
+        baml_options: BamlCallOptions = {},
+    ) -> str:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      parsed = self.__runtime.parse_llm_response(
+        "Sum",
+        llm_response,
+        types,
+        types,
+        partial_types,
+        False,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return cast(str, parsed)
+    
 
 
 class LlmStreamParser:
@@ -100,11 +204,11 @@ class LlmStreamParser:
       self.__ctx_manager = ctx_manager
 
     
-    def ExtractResume(
+    def Divide(
         self,
         llm_response: str,
         baml_options: BamlCallOptions = {},
-    ) -> partial_types.Resume:
+    ) -> Optional[str]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb # type: ignore (we know how to use this private attribute)
@@ -113,7 +217,7 @@ class LlmStreamParser:
       __cr__ = baml_options.get("client_registry", None)
 
       parsed = self.__runtime.parse_llm_response(
-        "ExtractResume",
+        "Divide",
         llm_response,
         types,
         types,
@@ -124,7 +228,33 @@ class LlmStreamParser:
         __cr__,
       )
 
-      return cast(partial_types.Resume, parsed)
+      return cast(Optional[str], parsed)
+    
+    def ExecutePlan(
+        self,
+        llm_response: str,
+        baml_options: BamlCallOptions = {},
+    ) -> partial_types.PlanResult:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      parsed = self.__runtime.parse_llm_response(
+        "ExecutePlan",
+        llm_response,
+        types,
+        types,
+        partial_types,
+        True,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return cast(partial_types.PlanResult, parsed)
     
     def GeneratePlans(
         self,
@@ -151,6 +281,84 @@ class LlmStreamParser:
       )
 
       return cast(partial_types.Response, parsed)
+    
+    def Multiply(
+        self,
+        llm_response: str,
+        baml_options: BamlCallOptions = {},
+    ) -> Optional[str]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      parsed = self.__runtime.parse_llm_response(
+        "Multiply",
+        llm_response,
+        types,
+        types,
+        partial_types,
+        True,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return cast(Optional[str], parsed)
+    
+    def Subtract(
+        self,
+        llm_response: str,
+        baml_options: BamlCallOptions = {},
+    ) -> Optional[str]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      parsed = self.__runtime.parse_llm_response(
+        "Subtract",
+        llm_response,
+        types,
+        types,
+        partial_types,
+        True,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return cast(Optional[str], parsed)
+    
+    def Sum(
+        self,
+        llm_response: str,
+        baml_options: BamlCallOptions = {},
+    ) -> Optional[str]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      parsed = self.__runtime.parse_llm_response(
+        "Sum",
+        llm_response,
+        types,
+        types,
+        partial_types,
+        True,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return cast(Optional[str], parsed)
     
 
 

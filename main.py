@@ -25,6 +25,11 @@ class PlannerRequest(BaseModel):
 class PlannerResponse(BaseModel):
     plan: List[str]
 
+class PlanExecute(BaseModel):
+    steps: List[str]
+
+class PlanResult(BaseModel):
+    result: str
 
 @app.post("/plannar")
 async def generate_plans(request: PlannerRequest) -> PlannerResponse:
@@ -34,3 +39,7 @@ async def generate_plans(request: PlannerRequest) -> PlannerResponse:
     response = await b.GeneratePlans(instruction, tools)
 
     return PlannerResponse(plan=response.plans)
+
+@app.post("/execute-plan")
+async def plan_executer(request: PlanExecute) -> PlanResult:
+    pass

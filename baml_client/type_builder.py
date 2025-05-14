@@ -22,7 +22,7 @@ from .globals import DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIM
 class TypeBuilder(_TypeBuilder):
     def __init__(self):
         super().__init__(classes=set(
-          ["Instruction","Response","Resume","Tool","ToolCall",]
+          ["Instruction","PlanResult","Response","Steps","Tool","ToolCall",]
         ), enums=set(
           []
         ), runtime=DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIME)
@@ -33,12 +33,16 @@ class TypeBuilder(_TypeBuilder):
         return InstructionAst(self)
 
     @property
+    def PlanResult(self) -> "PlanResultAst":
+        return PlanResultAst(self)
+
+    @property
     def Response(self) -> "ResponseAst":
         return ResponseAst(self)
 
     @property
-    def Resume(self) -> "ResumeAst":
-        return ResumeAst(self)
+    def Steps(self) -> "StepsAst":
+        return StepsAst(self)
 
     @property
     def Tool(self) -> "ToolAst":
@@ -90,6 +94,44 @@ class InstructionProperties:
 
     
 
+class PlanResultAst:
+    def __init__(self, tb: _TypeBuilder):
+        _tb = tb._tb # type: ignore (we know how to use this private attribute)
+        self._bldr = _tb.class_("PlanResult")
+        self._properties: typing.Set[str] = set([ "result", ])
+        self._props = PlanResultProperties(self._bldr, self._properties)
+
+    def type(self) -> FieldType:
+        return self._bldr.field()
+
+    @property
+    def props(self) -> "PlanResultProperties":
+        return self._props
+
+
+class PlanResultViewer(PlanResultAst):
+    def __init__(self, tb: _TypeBuilder):
+        super().__init__(tb)
+
+    
+    def list_properties(self) -> typing.List[typing.Tuple[str, ClassPropertyViewer]]:
+        return [(name, ClassPropertyViewer(self._bldr.property(name))) for name in self._properties]
+
+
+
+class PlanResultProperties:
+    def __init__(self, bldr: ClassBuilder, properties: typing.Set[str]):
+        self.__bldr = bldr
+        self.__properties = properties
+
+    
+
+    @property
+    def result(self) -> ClassPropertyViewer:
+        return ClassPropertyViewer(self.__bldr.property("result"))
+
+    
+
 class ResponseAst:
     def __init__(self, tb: _TypeBuilder):
         _tb = tb._tb # type: ignore (we know how to use this private attribute)
@@ -128,22 +170,22 @@ class ResponseProperties:
 
     
 
-class ResumeAst:
+class StepsAst:
     def __init__(self, tb: _TypeBuilder):
         _tb = tb._tb # type: ignore (we know how to use this private attribute)
-        self._bldr = _tb.class_("Resume")
-        self._properties: typing.Set[str] = set([ "name",  "email",  "experience",  "skills", ])
-        self._props = ResumeProperties(self._bldr, self._properties)
+        self._bldr = _tb.class_("Steps")
+        self._properties: typing.Set[str] = set([ "step", ])
+        self._props = StepsProperties(self._bldr, self._properties)
 
     def type(self) -> FieldType:
         return self._bldr.field()
 
     @property
-    def props(self) -> "ResumeProperties":
+    def props(self) -> "StepsProperties":
         return self._props
 
 
-class ResumeViewer(ResumeAst):
+class StepsViewer(StepsAst):
     def __init__(self, tb: _TypeBuilder):
         super().__init__(tb)
 
@@ -153,7 +195,7 @@ class ResumeViewer(ResumeAst):
 
 
 
-class ResumeProperties:
+class StepsProperties:
     def __init__(self, bldr: ClassBuilder, properties: typing.Set[str]):
         self.__bldr = bldr
         self.__properties = properties
@@ -161,20 +203,8 @@ class ResumeProperties:
     
 
     @property
-    def name(self) -> ClassPropertyViewer:
-        return ClassPropertyViewer(self.__bldr.property("name"))
-
-    @property
-    def email(self) -> ClassPropertyViewer:
-        return ClassPropertyViewer(self.__bldr.property("email"))
-
-    @property
-    def experience(self) -> ClassPropertyViewer:
-        return ClassPropertyViewer(self.__bldr.property("experience"))
-
-    @property
-    def skills(self) -> ClassPropertyViewer:
-        return ClassPropertyViewer(self.__bldr.property("skills"))
+    def step(self) -> ClassPropertyViewer:
+        return ClassPropertyViewer(self.__bldr.property("step"))
 
     
 
