@@ -12,10 +12,6 @@ app = FastAPI()
 class Tool(BaseModel):
     name: str
 
-# class ToolCall(BaseModel):
-#     tool_name: str
-#     args: Dict[str, any]
-
 class PlannerRequest(BaseModel):
     instructions: str
     tools: List[str]
