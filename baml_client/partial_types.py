@@ -39,7 +39,7 @@ class Instruction(BaseModel):
     description: Optional[str] = None
 
 class PlanExecute(BaseModel):
-    step: Optional[str] = None
+    steps: Optional[str] = None
 
 class PlanResult(BaseModel):
     result: Optional[str] = None

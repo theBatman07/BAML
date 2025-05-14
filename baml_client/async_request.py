@@ -39,7 +39,7 @@ class AsyncHttpRequest:
     
     async def ExecutePlan(
         self,
-        steps: List[types.PlanExecute],
+        steps: List[types.PlanExecute],tools: List[types.Tool],
         baml_options: BamlCallOptions = {},
     ) -> baml_py.HTTPRequest:
       __tb__ = baml_options.get("tb", None)
@@ -53,6 +53,7 @@ class AsyncHttpRequest:
         "ExecutePlan",
         {
           "steps": steps,
+          "tools": tools,
         },
         self.__ctx_manager.get(),
         tb,
@@ -97,7 +98,7 @@ class AsyncHttpStreamRequest:
     
     async def ExecutePlan(
         self,
-        steps: List[types.PlanExecute],
+        steps: List[types.PlanExecute],tools: List[types.Tool],
         baml_options: BamlCallOptions = {},
     ) -> baml_py.HTTPRequest:
       __tb__ = baml_options.get("tb", None)
@@ -111,6 +112,7 @@ class AsyncHttpStreamRequest:
         "ExecutePlan",
         {
           "steps": steps,
+          "tools": tools,
         },
         self.__ctx_manager.get(),
         tb,

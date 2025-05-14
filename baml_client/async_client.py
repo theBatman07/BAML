@@ -102,7 +102,7 @@ class BamlAsyncClient:
     
     async def ExecutePlan(
         self,
-        steps: List[types.PlanExecute],
+        steps: List[types.PlanExecute],tools: List[types.Tool],
         baml_options: BamlCallOptions = {},
     ) -> types.PlanResult:
       options: BamlCallOptions = {**self.__baml_options, **(baml_options or {})}
@@ -118,7 +118,7 @@ class BamlAsyncClient:
       raw = await self.__runtime.call_function(
         "ExecutePlan",
         {
-          "steps": steps,
+          "steps": steps,"tools": tools,
         },
         self.__ctx_manager.get(),
         tb,
@@ -168,7 +168,7 @@ class BamlStreamClient:
     
     def ExecutePlan(
         self,
-        steps: List[types.PlanExecute],
+        steps: List[types.PlanExecute],tools: List[types.Tool],
         baml_options: BamlCallOptions = {},
     ) -> baml_py.BamlStream[partial_types.PlanResult, types.PlanResult]:
       options: BamlCallOptions = {**self.__baml_options, **(baml_options or {})}
@@ -184,6 +184,7 @@ class BamlStreamClient:
         "ExecutePlan",
         {
           "steps": steps,
+          "tools": tools,
         },
         None,
         self.__ctx_manager.get(),

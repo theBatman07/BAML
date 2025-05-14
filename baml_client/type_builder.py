@@ -98,7 +98,7 @@ class PlanExecuteAst:
     def __init__(self, tb: _TypeBuilder):
         _tb = tb._tb # type: ignore (we know how to use this private attribute)
         self._bldr = _tb.class_("PlanExecute")
-        self._properties: typing.Set[str] = set([ "step", ])
+        self._properties: typing.Set[str] = set([ "steps", ])
         self._props = PlanExecuteProperties(self._bldr, self._properties)
 
     def type(self) -> FieldType:
@@ -127,8 +127,8 @@ class PlanExecuteProperties:
     
 
     @property
-    def step(self) -> ClassPropertyViewer:
-        return ClassPropertyViewer(self.__bldr.property("step"))
+    def steps(self) -> ClassPropertyViewer:
+        return ClassPropertyViewer(self.__bldr.property("steps"))
 
     
 

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Dict
 from baml_client import b
-from baml_client.types import Tool, Instruction
+from baml_client.types import Tool, Instruction, PlanExecute, PlanResult
 
 from dotenv import load_dotenv
 load_dotenv() 
@@ -23,8 +23,9 @@ class PlannerRequest(BaseModel):
 class PlannerResponse(BaseModel):
     plan: List[str]
 
-class PlanExecute(BaseModel):
+class PlanExecuteRequest(BaseModel):
     steps: List[str]
+    tools: List[str]
 
 class PlanResult(BaseModel):
     result: str
@@ -36,10 +37,13 @@ async def generate_plans(request: PlannerRequest) -> PlannerResponse:
 
     response = b.GeneratePlans(instruction, tools)
 
-    print(f"The generated response..............", response)
-
     return PlannerResponse(plan=response.plans)
 
 @app.post("/execute-plan")
-async def plan_executer(request: PlanExecute) -> PlanResult:
-    steps = PlanExecute
+async def plan_executer(request: PlanExecuteRequest) -> PlanResult:
+    steps = [PlanExecute(steps=step) for step in request.steps]
+    tools = [Tool(name=tool) for tool in request.tools]
+
+    response = b.ExecutePlan(steps, tools)
+
+    return PlanResult(result=response.result)

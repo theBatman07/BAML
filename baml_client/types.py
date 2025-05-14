@@ -44,7 +44,7 @@ class Instruction(BaseModel):
     description: str
 
 class PlanExecute(BaseModel):
-    step: str
+    steps: str
 
 class PlanResult(BaseModel):
     result: str
