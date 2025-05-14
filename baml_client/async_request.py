@@ -60,6 +60,30 @@ class AsyncHttpRequest:
         False,
       )
     
+    async def GeneratePlans(
+        self,
+        instruction: types.Instruction,tools: List[types.Tool],
+        baml_options: BamlCallOptions = {},
+    ) -> baml_py.HTTPRequest:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      return await self.__runtime.build_request(
+        "GeneratePlans",
+        {
+          "instruction": instruction,
+          "tools": tools,
+        },
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+        False,
+      )
+    
 
 
 class AsyncHttpStreamRequest:
@@ -87,6 +111,30 @@ class AsyncHttpStreamRequest:
         "ExtractResume",
         {
           "resume": resume,
+        },
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+        True,
+      )
+    
+    async def GeneratePlans(
+        self,
+        instruction: types.Instruction,tools: List[types.Tool],
+        baml_options: BamlCallOptions = {},
+    ) -> baml_py.HTTPRequest:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      return await self.__runtime.build_request(
+        "GeneratePlans",
+        {
+          "instruction": instruction,
+          "tools": tools,
         },
         self.__ctx_manager.get(),
         tb,

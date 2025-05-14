@@ -22,19 +22,111 @@ from .globals import DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIM
 class TypeBuilder(_TypeBuilder):
     def __init__(self):
         super().__init__(classes=set(
-          ["Resume",]
+          ["Instruction","Response","Resume","Tool","ToolCall",]
         ), enums=set(
           []
         ), runtime=DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIME)
 
 
     @property
+    def Instruction(self) -> "InstructionAst":
+        return InstructionAst(self)
+
+    @property
+    def Response(self) -> "ResponseAst":
+        return ResponseAst(self)
+
+    @property
     def Resume(self) -> "ResumeAst":
         return ResumeAst(self)
 
+    @property
+    def Tool(self) -> "ToolAst":
+        return ToolAst(self)
+
+    @property
+    def ToolCall(self) -> "ToolCallAst":
+        return ToolCallAst(self)
 
 
 
+
+
+class InstructionAst:
+    def __init__(self, tb: _TypeBuilder):
+        _tb = tb._tb # type: ignore (we know how to use this private attribute)
+        self._bldr = _tb.class_("Instruction")
+        self._properties: typing.Set[str] = set([ "description", ])
+        self._props = InstructionProperties(self._bldr, self._properties)
+
+    def type(self) -> FieldType:
+        return self._bldr.field()
+
+    @property
+    def props(self) -> "InstructionProperties":
+        return self._props
+
+
+class InstructionViewer(InstructionAst):
+    def __init__(self, tb: _TypeBuilder):
+        super().__init__(tb)
+
+    
+    def list_properties(self) -> typing.List[typing.Tuple[str, ClassPropertyViewer]]:
+        return [(name, ClassPropertyViewer(self._bldr.property(name))) for name in self._properties]
+
+
+
+class InstructionProperties:
+    def __init__(self, bldr: ClassBuilder, properties: typing.Set[str]):
+        self.__bldr = bldr
+        self.__properties = properties
+
+    
+
+    @property
+    def description(self) -> ClassPropertyViewer:
+        return ClassPropertyViewer(self.__bldr.property("description"))
+
+    
+
+class ResponseAst:
+    def __init__(self, tb: _TypeBuilder):
+        _tb = tb._tb # type: ignore (we know how to use this private attribute)
+        self._bldr = _tb.class_("Response")
+        self._properties: typing.Set[str] = set([ "plans", ])
+        self._props = ResponseProperties(self._bldr, self._properties)
+
+    def type(self) -> FieldType:
+        return self._bldr.field()
+
+    @property
+    def props(self) -> "ResponseProperties":
+        return self._props
+
+
+class ResponseViewer(ResponseAst):
+    def __init__(self, tb: _TypeBuilder):
+        super().__init__(tb)
+
+    
+    def list_properties(self) -> typing.List[typing.Tuple[str, ClassPropertyViewer]]:
+        return [(name, ClassPropertyViewer(self._bldr.property(name))) for name in self._properties]
+
+
+
+class ResponseProperties:
+    def __init__(self, bldr: ClassBuilder, properties: typing.Set[str]):
+        self.__bldr = bldr
+        self.__properties = properties
+
+    
+
+    @property
+    def plans(self) -> ClassPropertyViewer:
+        return ClassPropertyViewer(self.__bldr.property("plans"))
+
+    
 
 class ResumeAst:
     def __init__(self, tb: _TypeBuilder):
@@ -83,6 +175,82 @@ class ResumeProperties:
     @property
     def skills(self) -> ClassPropertyViewer:
         return ClassPropertyViewer(self.__bldr.property("skills"))
+
+    
+
+class ToolAst:
+    def __init__(self, tb: _TypeBuilder):
+        _tb = tb._tb # type: ignore (we know how to use this private attribute)
+        self._bldr = _tb.class_("Tool")
+        self._properties: typing.Set[str] = set([ "name", ])
+        self._props = ToolProperties(self._bldr, self._properties)
+
+    def type(self) -> FieldType:
+        return self._bldr.field()
+
+    @property
+    def props(self) -> "ToolProperties":
+        return self._props
+
+
+class ToolViewer(ToolAst):
+    def __init__(self, tb: _TypeBuilder):
+        super().__init__(tb)
+
+    
+    def list_properties(self) -> typing.List[typing.Tuple[str, ClassPropertyViewer]]:
+        return [(name, ClassPropertyViewer(self._bldr.property(name))) for name in self._properties]
+
+
+
+class ToolProperties:
+    def __init__(self, bldr: ClassBuilder, properties: typing.Set[str]):
+        self.__bldr = bldr
+        self.__properties = properties
+
+    
+
+    @property
+    def name(self) -> ClassPropertyViewer:
+        return ClassPropertyViewer(self.__bldr.property("name"))
+
+    
+
+class ToolCallAst:
+    def __init__(self, tb: _TypeBuilder):
+        _tb = tb._tb # type: ignore (we know how to use this private attribute)
+        self._bldr = _tb.class_("ToolCall")
+        self._properties: typing.Set[str] = set([ "tool_name", ])
+        self._props = ToolCallProperties(self._bldr, self._properties)
+
+    def type(self) -> FieldType:
+        return self._bldr.field()
+
+    @property
+    def props(self) -> "ToolCallProperties":
+        return self._props
+
+
+class ToolCallViewer(ToolCallAst):
+    def __init__(self, tb: _TypeBuilder):
+        super().__init__(tb)
+
+    
+    def list_properties(self) -> typing.List[typing.Tuple[str, ClassPropertyViewer]]:
+        return [(name, ClassPropertyViewer(self._bldr.property(name))) for name in self._properties]
+
+
+
+class ToolCallProperties:
+    def __init__(self, bldr: ClassBuilder, properties: typing.Set[str]):
+        self.__bldr = bldr
+        self.__properties = properties
+
+    
+
+    @property
+    def tool_name(self) -> ClassPropertyViewer:
+        return ClassPropertyViewer(self.__bldr.property("tool_name"))
 
     
 

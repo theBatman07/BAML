@@ -6,20 +6,23 @@ client<llm> GPT4o {
     }
 }
 
+class Instruction {
+    description string
+}
+
 class Tool {
     name string
 }
 
 class ToolCall {
     tool_name string
-    args map<string, any>
 }
 
 class Response {
     plans string
 }
 
-function GeneratePlans(instruction: string, tools: Tool[]) -> Response {
+function GeneratePlans(instruction: Instruction, tools: Tool[]) -> Response {
     client GPT4o
     prompt #"
 
@@ -29,7 +32,7 @@ function GeneratePlans(instruction: string, tools: Tool[]) -> Response {
         {{ tool.name }}
         {% endfor %}
         
-        You are a expert planner, that can take input in natural language, identify the tools prsent in the instruction: {{ instruction }},
+        You are a expert planner, that can take input in natural language, identify the tools prsent in the instruction: {{ instruction.description }},
         then after carefull analysis, provide the list of tool calls (STEPS) that can be taken
 
         {{ ctx.output_format }}

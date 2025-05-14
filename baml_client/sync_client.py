@@ -125,6 +125,33 @@ class BamlSyncClient:
       )
       return cast(types.Resume, raw.cast_to(types, types, partial_types, False))
     
+    def GeneratePlans(
+        self,
+        instruction: types.Instruction,tools: List[types.Tool],
+        baml_options: BamlCallOptions = {},
+    ) -> types.Response:
+      options: BamlCallOptions = {**self.__baml_options, **(baml_options or {})}
+      __tb__ = options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = options.get("client_registry", None)
+      collector = options.get("collector", None)
+      collectors = collector if isinstance(collector, list) else [collector] if collector is not None else []
+
+      raw = self.__runtime.call_function_sync(
+        "GeneratePlans",
+        {
+          "instruction": instruction,"tools": tools,
+        },
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+        collectors,
+      )
+      return cast(types.Response, raw.cast_to(types, types, partial_types, False))
+    
 
 
 
@@ -169,6 +196,41 @@ class BamlStreamClient:
         raw,
         lambda x: cast(partial_types.Resume, x.cast_to(types, types, partial_types, True)),
         lambda x: cast(types.Resume, x.cast_to(types, types, partial_types, False)),
+        self.__ctx_manager.get(),
+      )
+    
+    def GeneratePlans(
+        self,
+        instruction: types.Instruction,tools: List[types.Tool],
+        baml_options: BamlCallOptions = {},
+    ) -> baml_py.BamlSyncStream[partial_types.Response, types.Response]:
+      options: BamlCallOptions = {**self.__baml_options, **(baml_options or {})}
+      __tb__ = options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = options.get("client_registry", None)
+      collector = options.get("collector", None)
+      collectors = collector if isinstance(collector, list) else [collector] if collector is not None else []
+
+      raw = self.__runtime.stream_function_sync(
+        "GeneratePlans",
+        {
+          "instruction": instruction,
+          "tools": tools,
+        },
+        None,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+        collectors,
+      )
+
+      return baml_py.BamlSyncStream[partial_types.Response, types.Response](
+        raw,
+        lambda x: cast(partial_types.Response, x.cast_to(types, types, partial_types, True)),
+        lambda x: cast(types.Response, x.cast_to(types, types, partial_types, False)),
         self.__ctx_manager.get(),
       )
     

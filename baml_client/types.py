@@ -40,9 +40,21 @@ def all_succeeded(checks: Dict[CheckName, Check]) -> bool:
 
 
 
+class Instruction(BaseModel):
+    description: str
+
+class Response(BaseModel):
+    plans: str
+
 class Resume(BaseModel):
     name: str
     email: str
     experience: List[str]
     skills: List[str]
+
+class Tool(BaseModel):
+    name: str
+
+class ToolCall(BaseModel):
+    tool_name: str
 

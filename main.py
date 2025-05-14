@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Dict
+from baml_client import b
+from baml_client.types import Tool, Instruction
 
 app = FastAPI()
 
