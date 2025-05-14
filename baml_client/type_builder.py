@@ -22,7 +22,7 @@ from .globals import DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIM
 class TypeBuilder(_TypeBuilder):
     def __init__(self):
         super().__init__(classes=set(
-          ["Instruction","PlanResult","Response","Steps","Tool","ToolCall",]
+          ["Instruction","PlanExecute","PlanResult","Response","Tool","ToolCall",]
         ), enums=set(
           []
         ), runtime=DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIME)
@@ -33,16 +33,16 @@ class TypeBuilder(_TypeBuilder):
         return InstructionAst(self)
 
     @property
+    def PlanExecute(self) -> "PlanExecuteAst":
+        return PlanExecuteAst(self)
+
+    @property
     def PlanResult(self) -> "PlanResultAst":
         return PlanResultAst(self)
 
     @property
     def Response(self) -> "ResponseAst":
         return ResponseAst(self)
-
-    @property
-    def Steps(self) -> "StepsAst":
-        return StepsAst(self)
 
     @property
     def Tool(self) -> "ToolAst":
@@ -91,6 +91,44 @@ class InstructionProperties:
     @property
     def description(self) -> ClassPropertyViewer:
         return ClassPropertyViewer(self.__bldr.property("description"))
+
+    
+
+class PlanExecuteAst:
+    def __init__(self, tb: _TypeBuilder):
+        _tb = tb._tb # type: ignore (we know how to use this private attribute)
+        self._bldr = _tb.class_("PlanExecute")
+        self._properties: typing.Set[str] = set([ "step", ])
+        self._props = PlanExecuteProperties(self._bldr, self._properties)
+
+    def type(self) -> FieldType:
+        return self._bldr.field()
+
+    @property
+    def props(self) -> "PlanExecuteProperties":
+        return self._props
+
+
+class PlanExecuteViewer(PlanExecuteAst):
+    def __init__(self, tb: _TypeBuilder):
+        super().__init__(tb)
+
+    
+    def list_properties(self) -> typing.List[typing.Tuple[str, ClassPropertyViewer]]:
+        return [(name, ClassPropertyViewer(self._bldr.property(name))) for name in self._properties]
+
+
+
+class PlanExecuteProperties:
+    def __init__(self, bldr: ClassBuilder, properties: typing.Set[str]):
+        self.__bldr = bldr
+        self.__properties = properties
+
+    
+
+    @property
+    def step(self) -> ClassPropertyViewer:
+        return ClassPropertyViewer(self.__bldr.property("step"))
 
     
 
@@ -167,44 +205,6 @@ class ResponseProperties:
     @property
     def plans(self) -> ClassPropertyViewer:
         return ClassPropertyViewer(self.__bldr.property("plans"))
-
-    
-
-class StepsAst:
-    def __init__(self, tb: _TypeBuilder):
-        _tb = tb._tb # type: ignore (we know how to use this private attribute)
-        self._bldr = _tb.class_("Steps")
-        self._properties: typing.Set[str] = set([ "step", ])
-        self._props = StepsProperties(self._bldr, self._properties)
-
-    def type(self) -> FieldType:
-        return self._bldr.field()
-
-    @property
-    def props(self) -> "StepsProperties":
-        return self._props
-
-
-class StepsViewer(StepsAst):
-    def __init__(self, tb: _TypeBuilder):
-        super().__init__(tb)
-
-    
-    def list_properties(self) -> typing.List[typing.Tuple[str, ClassPropertyViewer]]:
-        return [(name, ClassPropertyViewer(self._bldr.property(name))) for name in self._properties]
-
-
-
-class StepsProperties:
-    def __init__(self, bldr: ClassBuilder, properties: typing.Set[str]):
-        self.__bldr = bldr
-        self.__properties = properties
-
-    
-
-    @property
-    def step(self) -> ClassPropertyViewer:
-        return ClassPropertyViewer(self.__bldr.property("step"))
 
     
 

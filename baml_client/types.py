@@ -43,14 +43,14 @@ def all_succeeded(checks: Dict[CheckName, Check]) -> bool:
 class Instruction(BaseModel):
     description: str
 
+class PlanExecute(BaseModel):
+    step: str
+
 class PlanResult(BaseModel):
     result: str
 
 class Response(BaseModel):
-    plans: str
-
-class Steps(BaseModel):
-    step: str
+    plans: List[str]
 
 class Tool(BaseModel):
     name: str

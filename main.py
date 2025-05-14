@@ -11,8 +11,6 @@ app = FastAPI()
 
 class Tool(BaseModel):
     name: str
-    description: str 
-    parameters: Dict[str, str]
 
 # class ToolCall(BaseModel):
 #     tool_name: str
@@ -33,13 +31,15 @@ class PlanResult(BaseModel):
 
 @app.post("/plannar")
 async def generate_plans(request: PlannerRequest) -> PlannerResponse:
-    instruction = Instruction(description=request.instruction)
+    instruction = Instruction(description=request.instructions)
     tools = [Tool(name=tool) for tool in request.tools]
 
-    response = await b.GeneratePlans(instruction, tools)
+    response = b.GeneratePlans(instruction, tools)
+
+    print(f"The generated response..............", response)
 
     return PlannerResponse(plan=response.plans)
 
 @app.post("/execute-plan")
 async def plan_executer(request: PlanExecute) -> PlanResult:
-    pass
+    steps = PlanExecute

@@ -19,10 +19,10 @@ class ToolCall {
 }
 
 class Response {
-    plans string
+    plans string[]
 }
 
-class Steps {
+class PlanExecute {
     step string
 }
 
@@ -48,32 +48,11 @@ function GeneratePlans(instruction: Instruction, tools: Tool[]) -> Response {
     "#
 }
 
-function Sum(a: int, b: int) -> string {
-  client GPT4o
-  prompt #"What is {{ a }} + {{ b }}?"#
-}
-
-function Subtract(a: int, b: int) -> string {
-  client GPT4o
-  prompt #"What is {{ a }} - {{ b }}?"#
-}
-
-function Multiply(a: int, b: int) -> string {
-  client GPT4o
-  prompt #"What is {{ a }} * {{ b }}?"#
-}
-
-function Divide(a: int, b: int) -> string {
-  client GPT4o
-  prompt #"What is {{ a }} / {{ b }}?"#
-}
-
-
-function ExecutePlan(steps: Steps[]) -> PlanResult {
+function ExecutePlan(steps: PlanExecute[]) -> PlanResult {
     client GPT4o
 
     prompt #"
-        You are a function orchestrator. Given a list of step instructions, identify whether to use Sum, Subtract, Multiply or Divide (only call divide if b is greater than 0 otherwise return error: cannot divide by zero).
+        You are a step executor. Given a list of steps, execute them one by one and provide the final result.
 
         Call the appropriate function using the input values extracted from the step.
     

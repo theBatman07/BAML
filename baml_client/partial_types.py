@@ -38,14 +38,14 @@ class StreamState(BaseModel, Generic[T]):
 class Instruction(BaseModel):
     description: Optional[str] = None
 
+class PlanExecute(BaseModel):
+    step: Optional[str] = None
+
 class PlanResult(BaseModel):
     result: Optional[str] = None
 
 class Response(BaseModel):
-    plans: Optional[str] = None
-
-class Steps(BaseModel):
-    step: Optional[str] = None
+    plans: List[str]
 
 class Tool(BaseModel):
     name: Optional[str] = None
